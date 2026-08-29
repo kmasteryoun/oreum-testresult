@@ -1,12 +1,12 @@
 /* [오름] 국어 · 독서 복습시험 — 조교 채점 입력 엔진
    paper.js(build_paper.py 가 생성)를 그대로 읽는다. 시험지 번호 = 여기 번호. */
 
-const SCRIPT_URL = "";   // ← Apps Script 웹 앱 URL (index.html 과 같은 주소를 쓰면 됩니다)
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywXRJdVLbGUu5E_yuQ2xgAVlCcKdIdAX3zq8as_nVskM5j4Bi4dCFcb-xkKH_fQ50D/exec";   // ← Apps Script 웹 앱 URL (index.html 과 같은 주소를 쓰면 됩니다)
 
 /* 조교 전용 암호. 바꾸려면 이 줄만 고치면 됩니다.
    ※ 화면을 가리는 정도이지 진짜 자물쇠는 아닙니다. 소스를 열면 보입니다.
       주소를 학생에게 알리지 않는 것이 여전히 가장 중요합니다. */
-const PASSCODE = "oreum2026";
+const PASSCODE = "74527697";
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
