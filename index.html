@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>[오름] 국어 · 독서 복습시험 채점 입력</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg-deep:#0a0e0a; --bg-card:#111a11; --bg-input:#101a10;
+--border-row:rgba(255,255,255,.35); --border-outer:rgba(255,255,255,.35);
+--green-brand:#4a5a3a; --green-accent:#6b8f5e; --green-light:#8aad7a;
+--gold:#c9a84c; --gold-dim:#a08838;
+--text-primary:#ece8e0; --text-secondary:#c4bfb4; --text-muted:#928d82; --text-dim:#7a7568;
+--correct:#22c55e; --wrong:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg-deep);color:var(--text-primary);font-family:"Noto Sans KR",sans-serif;
+  word-break:keep-all;line-height:1.7;padding-bottom:96px}
+.serif{font-family:"Noto Serif KR",serif}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+header{position:sticky;top:0;z-index:60;background:rgba(10,14,10,.96);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border-row);padding:12px 0}
+header .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{font-family:"Noto Serif KR",serif;font-weight:900;color:var(--gold);font-size:17px}
+.tagline{font-size:12.5px;color:var(--text-muted)}
+.spacer{flex:1}
+
+.panel{background:linear-gradient(160deg,#131d13,#0d140d);border:1px solid var(--border-outer);
+  border-radius:14px;padding:18px;margin:16px 0;
+  box-shadow:0 14px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.05)}
+.panel h2{font-size:12.5px;font-weight:700;color:var(--green-light);letter-spacing:.08em;margin-bottom:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+select,input[type=text]{background:var(--bg-input);border:1px solid rgba(255,255,255,.28);
+  border-radius:9px;color:var(--text-primary);font-family:inherit;font-size:15px;padding:10px 12px}
+select:focus,input[type=text]:focus{outline:none;border-color:var(--green-accent)}
+select{-webkit-appearance:none;appearance:none;padding-right:30px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--green-light) 50%),linear-gradient(135deg,var(--green-light) 50%,transparent 50%);
+  background-position:calc(100% - 15px) 19px,calc(100% - 10px) 19px;background-size:5px 5px;background-repeat:no-repeat}
+select option{background:#111a11}
+.btn{border:1px solid var(--green-accent);background:transparent;color:var(--green-light);
+  padding:10px 16px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn:hover{background:rgba(107,143,94,.14)}
+.btn.solid{border:none;background:linear-gradient(180deg,#6b8f5e,#4a5a3a);color:#fff}
+.btn.gold{border-color:var(--gold-dim);color:var(--gold)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.hint{font-size:12px;color:var(--text-dim);margin-top:8px;line-height:1.75}
+
+/* 채점 그리드 */
+.parts{display:flex;flex-direction:column;gap:16px}
+.pgroup h3{font-size:13px;color:var(--gold);font-weight:700;margin-bottom:9px;
+  padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.16)}
+.grid{display:flex;flex-wrap:wrap;gap:7px}
+.chip{min-width:52px;border:1px solid var(--correct);background:rgba(34,197,94,.14);
+  border-radius:9px;padding:7px 4px;text-align:center;cursor:pointer;user-select:none;
+  font-size:13px;font-weight:700;color:var(--correct);transition:.1s}
+.chip:hover{filter:brightness(1.3)}
+.chip.no{border-color:var(--wrong);background:rgba(239,68,68,.16);color:var(--wrong)}
+.chip .k{display:block;font-size:9.5px;font-weight:400;color:var(--text-dim);margin-top:1px}
+.ox{min-width:78px;border:1px solid rgba(255,255,255,.25);background:transparent;border-radius:9px;
+  padding:5px 5px 6px;text-align:center;user-select:none}
+.ox .n{font-size:12.5px;font-weight:700;color:var(--text-secondary)}
+.ox .pair{display:flex;gap:4px;margin-top:4px}
+.ox .h{flex:1;font-size:10.5px;font-weight:700;padding:3px 0;border-radius:6px;cursor:pointer;
+  border:1px solid var(--correct);background:rgba(34,197,94,.14);color:var(--correct)}
+.ox .h.no{border-color:var(--wrong);background:rgba(239,68,68,.16);color:var(--wrong)}
+
+/* 요약 */
+.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat{border:1px solid var(--border-row);border-radius:11px;padding:12px;text-align:center;
+  background:rgba(255,255,255,.02)}
+.stat b{display:block;font-family:"Noto Serif KR",serif;font-size:23px;color:var(--gold);line-height:1.3}
+.stat span{font-size:11.5px;color:var(--text-muted)}
+table.t{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+table.t th,table.t td{border:1px solid var(--border-row);padding:7px 9px;text-align:center}
+table.t th{background:rgba(107,143,94,.16);color:var(--green-light);font-size:12px;font-weight:700}
+table.t td.l{text-align:left}
+.empty{color:var(--text-dim);font-size:13px;padding:8px 2px}
+
+#bar{position:fixed;bottom:0;left:0;right:0;z-index:70;background:rgba(10,14,10,.97);
+  backdrop-filter:blur(10px);border-top:1px solid var(--border-row);padding:11px 0}
+#bar .wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#bar .live{font-size:14px;color:var(--text-secondary);flex:1;min-width:200px}
+#bar .live b{color:var(--gold);font-family:"Noto Serif KR",serif;font-size:19px}
+#toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);z-index:200;background:#1b2a1b;
+  border:1px solid var(--green-accent);padding:13px 22px;border-radius:11px;font-size:14px;
+  display:none;box-shadow:0 12px 30px rgba(0,0,0,.6);max-width:92vw;text-align:center}
+.warn{border:1px solid rgba(239,68,68,.35);background:rgba(239,68,68,.05);border-radius:11px;
+  padding:14px 16px;font-size:11.5px;line-height:1.9;color:var(--text-muted);margin:18px 0 30px}
+.warn b{color:#f87171}
+/* 암호 게이트 */
+#gate{position:fixed;inset:0;z-index:300;background:var(--bg-deep);
+  display:flex;align-items:center;justify-content:center;padding:20px}
+.gbox{width:100%;max-width:360px;text-align:center;padding:32px 24px;
+  background:linear-gradient(160deg,#131d13,#0d140d);border:1px solid var(--border-outer);
+  border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.55)}
+.glogo{font-family:"Noto Serif KR",serif;font-weight:900;color:var(--gold);font-size:20px}
+.gtitle{font-family:"Noto Serif KR",serif;font-weight:700;font-size:15px;margin-top:6px}
+.ghint{font-size:12.5px;color:var(--text-muted);margin:14px 0 16px;line-height:1.7}
+#gpw{width:100%;background:var(--bg-input);border:1px solid rgba(255,255,255,.28);
+  border-radius:10px;color:var(--text-primary);padding:12px 14px;font-size:16px;font-family:inherit;
+  text-align:center;letter-spacing:.15em}
+#gpw:focus{outline:none;border-color:var(--green-accent)}
+#gbtn{width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;font-size:15px;
+  font-weight:700;font-family:"Noto Serif KR",serif;cursor:pointer;color:#fff;
+  background:linear-gradient(180deg,#6b8f5e,#4a5a3a)}
+.gerr{font-size:12.5px;color:#f87171;min-height:20px;margin-top:10px}
+
+@media(max-width:768px){
+  .sum{grid-template-columns:repeat(2,1fr)}
+  .row > *{flex:1 1 100%}
+  #bar .live{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <span class="logo">[오름] 국어</span>
+  <span class="tagline">독서 복습시험 · 채점 입력</span>
+  <span class="spacer"></span>
+  <span class="tagline" id="whoLbl"></span>
+</div></header>
+
+<div class="wrap">
+
+  <div class="panel">
+    <h2>1. 시험 선택</h2>
+    <div class="row">
+      <select id="schoolSel"></select>
+      <select id="workSel"></select>
+      <input type="text" id="nameIn" placeholder="학생 이름" autocomplete="off" style="flex:1;min-width:160px">
+    </div>
+    <div class="hint">시험지에 인쇄된 번호와 아래 번호가 같습니다. <b>맞은 것은 그대로 두고 틀린 것만 누르세요.</b></div>
+  </div>
+
+  <div class="panel">
+    <h2>2. 빠른 입력 <span style="color:var(--text-dim);font-weight:400">(선택)</span></h2>
+    <div class="row">
+      <input type="text" id="quick" placeholder="틀린 번호를 띄어쓰기로: 27 29 33ㄱ 35ㅁ" style="flex:1;min-width:220px">
+      <button class="btn" id="quickBtn">적용</button>
+    </div>
+    <div class="hint">
+      숫자만 쓰면 그 번호를 오답 처리합니다. 2부(O/X) 문항은 <b>27</b>=판단 오답, <b>27ㄱ</b>=근거 오답, <b>27ㅁ</b>=둘 다.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>3. 채점</h2>
+    <div class="parts" id="parts"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn" id="allOk">전부 정답으로</button>
+      <button class="btn gold" id="allNo">전부 오답으로</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>4. 결과</h2>
+    <div class="sum">
+      <div class="stat"><b id="sScore">0</b><span>점수</span></div>
+      <div class="stat"><b id="sRate">0%</b><span>정답률</span></div>
+      <div class="stat"><b id="sGrade">-</b><span>등급</span></div>
+      <div class="stat"><b id="sEvid">0</b><span>근거 못 찾음</span></div>
+    </div>
+    <table class="t" id="partTbl"></table>
+    <div id="trapWrap"></div>
+  </div>
+
+  <div class="panel">
+    <h2>5. 오늘 입력한 학생</h2>
+    <div id="doneList" class="empty">아직 없습니다.</div>
+  </div>
+
+  <div class="warn">
+    본 자료는 오직 <b>[오름] 국어</b> 학원 수강생들의 성적 향상을 위해 제작된 비매품입니다.<br>
+    본 화면은 <b>조교·강사 전용</b>입니다. 학생에게 주소를 공유하지 마세요.
+  </div>
+</div>
+
+<div id="bar"><div class="wrap">
+  <div class="live">채점 중 · <b id="liveScore">0 / 0</b> <span id="liveRate" style="color:var(--text-muted)"></span></div>
+  <button class="btn" id="resetBtn">초기화</button>
+  <button class="btn solid" id="saveBtn">저장하고 다음 학생 →</button>
+</div></div>
+<div id="toast"></div>
+<iframe name="sink" style="display:none"></iframe>
+<form id="sendForm" method="POST" target="sink" style="display:none"><input type="hidden" name="data" id="sendData"></form>
+
+<script src="paper.js"></script>
+<script src="grader.js"></script>
+</body>
+</html>
