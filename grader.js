@@ -12,7 +12,7 @@ const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const PARTS = ["1부", "2부", "3부", "4부", "5부"];
 const PART_NAME = { "1부": "구조 복원", "2부": "핵심 문장 복원", "3부": "선지 판별",
-                    "4부": "〈보기〉 적용", "5부": "어휘 · 지시어" };
+                    "4부": "〈보기〉 적용", "5부": "어휘 / 지시어" };
 
 const S = { school: null, work: null, wrong: {} };   // wrong[n] = true | {j:bool, g:bool}
 const done = [];
