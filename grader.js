@@ -61,16 +61,9 @@ function applyQuick() {
   const byN = {}; cur().units.forEach(u => byN[u.n] = u);
   let bad = [];
   raw.split(/[\s,]+/).filter(Boolean).forEach(tok => {
-    const m = tok.match(/^(\d+)\s*([ㄱㄴㅁgbGB근둘]?)$/);
-    if (!m) { bad.push(tok); return; }
-    const n = +m[1], sfx = m[2], u = byN[n];
-    if (!u) { bad.push(tok); return; }
-    if (u.kind !== "ox") { S.wrong[n] = true; return; }
-    const w = S.wrong[n] && typeof S.wrong[n] === "object" ? S.wrong[n] : { j: false, g: false };
-    if (sfx === "ㄱ" || sfx === "g" || sfx === "근") w.g = true;
-    else if (sfx === "ㅁ" || sfx === "b" || sfx === "둘") { w.j = true; w.g = true; }
-    else w.j = true;
-    S.wrong[n] = w;
+    const m = tok.match(/^(\d+)$/);
+    if (!m || !byN[+m[1]]) { bad.push(tok); return; }
+    S.wrong[+m[1]] = true;
   });
   $("#quick").value = "";
   render();
@@ -88,28 +81,15 @@ function render() {
     h += `<div class="pgroup"><h3>${p} · ${PART_NAME[p]} <span style="color:var(--text-dim);font-weight:400">
           ${us.length}문항</span></h3><div class="grid">`;
     us.forEach(u => {
-      if (u.kind === "ox") {
-        const wr = S.wrong[u.n] || {};
-        h += `<div class="ox"><div class="n">${u.n}</div><div class="pair">
-              <div class="h ${wr.j ? "no" : ""}" data-n="${u.n}" data-f="j">판</div>
-              <div class="h ${wr.g ? "no" : ""}" data-n="${u.n}" data-f="g">근</div></div></div>`;
-      } else {
-        h += `<div class="chip ${S.wrong[u.n] ? "no" : ""}" data-n="${u.n}">${u.n}
-              <span class="k">${u.kind === "choice" ? "객관" : "빈칸"}</span></div>`;
-      }
+      const k = u.kind === "choice" ? "객관" : u.kind === "ox" ? "O/X" : "빈칸";
+      h += `<div class="chip ${S.wrong[u.n] ? "no" : ""}" data-n="${u.n}">${u.n}
+            <span class="k">${k}</span></div>`;
     });
     h += "</div></div>";
   });
   $("#parts").innerHTML = h;
   $$("#parts .chip").forEach(c => c.onclick = () => {
     const n = +c.dataset.n; S.wrong[n] ? delete S.wrong[n] : S.wrong[n] = true; render();
-  });
-  $$("#parts .ox .h").forEach(c => c.onclick = () => {
-    const n = +c.dataset.n, f = c.dataset.f;
-    const o = (S.wrong[n] && typeof S.wrong[n] === "object") ? S.wrong[n] : { j: false, g: false };
-    o[f] = !o[f];
-    if (!o.j && !o.g) delete S.wrong[n]; else S.wrong[n] = o;
-    render();
   });
   summarize();
 }
@@ -118,24 +98,17 @@ function render() {
 function score() {
   const w = cur();
   const byPart = {}, traps = {};
-  let tot = 0, got = 0, evid = 0;
+  let tot = 0, got = 0;
   w.units.forEach(u => {
     const p = u.part;
     byPart[p] = byPart[p] || { tot: 0, got: 0 };
-    if (u.kind === "ox") {
-      const wr = S.wrong[u.n] || {};
-      tot += 2; byPart[p].tot += 2;
-      if (!wr.j) { got++; byPart[p].got++; }
-      else if (u.trap) traps[u.trap] = (traps[u.trap] || 0) + 1;
-      if (!wr.g) { got++; byPart[p].got++; } else evid++;
-    } else {
-      tot++; byPart[p].tot++;
-      if (!S.wrong[u.n]) { got++; byPart[p].got++; }
-    }
+    tot++; byPart[p].tot++;
+    if (!S.wrong[u.n]) { got++; byPart[p].got++; }
+    else if (u.kind === "ox" && u.trap) traps[u.trap] = (traps[u.trap] || 0) + 1;
   });
   const rate = tot ? Math.round(got / tot * 100) : 0;
   const grade = rate >= 90 ? "A" : rate >= 80 ? "B" : rate >= 70 ? "C" : rate >= 60 ? "D" : "F";
-  return { tot, got, rate, grade, evid, byPart, traps };
+  return { tot, got, rate, grade, byPart, traps };
 }
 
 function summarize() {
@@ -143,7 +116,6 @@ function summarize() {
   $("#sScore").textContent = r.got + " / " + r.tot;
   $("#sRate").textContent = r.rate + "%";
   $("#sGrade").textContent = r.grade;
-  $("#sEvid").textContent = r.evid;
   $("#liveScore").textContent = r.got + " / " + r.tot;
   $("#liveRate").textContent = "· " + r.rate + "% · " + r.grade;
 
@@ -172,11 +144,7 @@ function save() {
   const name = $("#nameIn").value.trim();
   if (!name) { toast("학생 이름을 입력하세요."); $("#nameIn").focus(); return; }
   const w = cur(), r = score();
-  const wrongList = w.units.filter(u => S.wrong[u.n]).map(u => {
-    if (u.kind !== "ox") return String(u.n);
-    const o = S.wrong[u.n];
-    return u.n + (o.j && o.g ? "(판단·근거)" : o.j ? "(판단)" : "(근거)");
-  });
+  const wrongList = w.units.filter(u => S.wrong[u.n]).map(u => String(u.n));
   const payload = {
     studentName: name, school: S.school, work: w.title, source: "종이시험 · 조교입력",
     sections: PARTS.filter(p => r.byPart[p]).map(p => ({
@@ -186,7 +154,7 @@ function save() {
       wrongs: w.units.filter(u => u.part === p && S.wrong[u.n]).map(u => String(u.n))
     })),
     totalBlanks: r.tot, totalCorrect: r.got, totalRate: r.rate,
-    grade: r.grade, evidenceMiss: r.evid,
+    grade: r.grade,
     traps: Object.entries(r.traps).map(([t, c]) => `${t}×${c}`),
     wrongDetail: wrongList
   };

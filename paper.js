@@ -932,7 +932,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 118,
+  "marks": 100,
   "file": "01_얼굴, 음성 그리고 문자"
  },
  "queue": {
@@ -2081,7 +2081,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 143,
+  "marks": 125,
   "file": "02_줄 서기를 돈으로 살 수 있을까"
  },
  "rain": {
@@ -3264,7 +3264,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 146,
+  "marks": 128,
   "file": "03_나, 비가 되고 싶어"
  },
  "fromm": {
@@ -4664,7 +4664,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 171,
+  "marks": 153,
   "file": "04_에리히 프롬의 『사랑의 기술』 읽기"
  },
  "flyby": {
@@ -5841,7 +5841,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 146,
+  "marks": 128,
   "file": "05_먼 우주로 떠나기 위한 가장 저렴한 방법"
  },
  "politics": {
@@ -7099,7 +7099,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 155,
+  "marks": 137,
   "file": "06_무엇이 내 삶의 정치일까"
  },
  "gunpo1": {
@@ -8525,7 +8525,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 173,
+  "marks": 155,
   "file": "07_사회적 대화로서의 글 읽기"
  },
  "swo_heidegger": {
@@ -9836,7 +9836,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 161,
+  "marks": 143,
   "file": "08_하이데거의 존재론"
  },
  "swo_minimal": {
@@ -11156,7 +11156,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 162,
+  "marks": 144,
   "file": "09_미니멀리즘 음악"
  },
  "swo_neoconf": {
@@ -12592,7 +12592,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 175,
+  "marks": 157,
   "file": "10_장재, 정이와 주희의 철학"
  },
  "swo_slippery": {
@@ -13922,7 +13922,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 163,
+  "marks": 145,
   "file": "11_미끄러운 비탈길 논증"
  },
  "gunpo2b": {
@@ -15343,7 +15343,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 173,
+  "marks": 155,
   "file": "12_책의 빈 공간은 소통의 공간"
  },
  "gunpo2c": {
@@ -16583,7 +16583,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 153,
+  "marks": 135,
   "file": "13_사피엔스"
  },
  "gunpo2r1": {
@@ -17995,7 +17995,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 172,
+  "marks": 154,
   "file": "14_아름다운 빚"
  },
  "gunpo2r2": {
@@ -19668,7 +19668,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 201,
+  "marks": 183,
   "file": "15_책 주인이 바뀔 때의 표정 한중일의 장서인"
  },
  "gunpo2r3": {
@@ -21251,7 +21251,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 191,
+  "marks": 173,
   "file": "16_지구라는 행성의 신들"
  },
  "swo_qdot": {
@@ -22706,7 +22706,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 177,
+  "marks": 159,
   "file": "17_양자점 디스플레이"
  },
  "swo_gill": {
@@ -24262,7 +24262,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 188,
+  "marks": 170,
   "file": "18_어류의 아가미 호흡"
  },
  "gunpo2d": {
@@ -25927,7 +25927,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 200,
+  "marks": 182,
   "file": "19_공감의 배신"
  },
  "gunpo2r4": {
@@ -27502,7 +27502,7 @@ const PAPER = {
     ]
    }
   ],
-  "marks": 190,
+  "marks": 172,
   "file": "20_논증이란"
  }
 };
